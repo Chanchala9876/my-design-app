@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Designer Signup</title>
+</head>
+<body>
+  <h2>Designer Signup</h2>
+  <form action="/api/designer/signup" method="POST">
+    <input type="text" name="name" placeholder="Your Name" required /><br />
+    <input type="text" name="storeName" placeholder="Store Name" required /><br />
+    <input type="email" name="email" placeholder="Email" required /><br />
+    <input type="password" name="password" placeholder="Password" required /><br />
+    <select name="category" required>
+  <option value="">Select Category</option>
+  <% categories.forEach(cat => { %>
+    <option value="<%= cat._id %>"><%= cat.name %></option>
+
+  <% }) %>
+</select>
+
+    <button type="submit">Sign Up</button>
+  </form>
+  <a href="/designer/login">Already have an account?</a>
+</body>
+</html>

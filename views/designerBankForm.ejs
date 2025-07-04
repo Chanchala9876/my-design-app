@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bank Details | DesignHub</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 py-10 px-4 md:px-40">
+
+  <nav class="bg-black text-white p-4 flex justify-between">
+    <h1 class="text-xl font-bold">DesignHub - Bank Details</h1>
+    <div>
+      <a href="/designer/dashboard" class="ml-4 hover:underline">Dashboard</a>
+      <a href="/logout" class="ml-4 hover:underline">Logout</a>
+    </div>
+  </nav>
+
+  <h2 class="text-3xl font-semibold my-6 text-center">Add / Update Bank Details</h2>
+
+  <form action="/designer/bank" method="POST" class="bg-white p-6 rounded shadow-md space-y-4 max-w-xl mx-auto">
+    <input type="text" name="accountHolderName" value="<%= bank?.accountHolderName || '' %>" placeholder="Account Holder Name" required class="w-full p-2 border rounded">
+    <input type="text" name="accountNumber" value="<%= bank?.accountNumber || '' %>" placeholder="Account Number" required class="w-full p-2 border rounded">
+    <input type="text" name="ifscCode" value="<%= bank?.ifscCode || '' %>" placeholder="IFSC Code" required class="w-full p-2 border rounded">
+    <input type="text" name="bankName" value="<%= bank?.bankName || '' %>" placeholder="Bank Name" required class="w-full p-2 border rounded">
+    <input type="text" name="upiId" value="<%= bank?.upiId || '' %>" placeholder="UPI ID (optional)" class="w-full p-2 border rounded">
+
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full">
+      Save Bank Details
+    </button>
+  </form>
+
+</body>
+</html>

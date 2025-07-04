@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DesignHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    function toggleDropdown(id) {
+      document.getElementById(id).classList.toggle('hidden');
+    }
+  </script>
+</head>
+<body class="bg-black text-white">
+
+  <!-- Navbar -->
+  <nav class="flex justify-between items-center p-6 bg-black bg-opacity-90 fixed w-full z-10">
+    <h1 class="text-2xl font-bold">DesignHub</h1>
+    <div class="space-x-6 relative flex items-center">
+
+      <a href="/" class="hover:underline">Home</a>
+      <a href="#" class="hover:underline">Stores</a>
+      <a href="#" class="hover:underline">Categories</a>
+
+      <!-- User Dropdown -->
+      <div class="relative">
+        <button onclick="toggleDropdown('userDropdown')" class="hover:underline focus:outline-none">User ▾</button>
+        <div id="userDropdown" class="absolute right-0 mt-2 w-40 bg-gray-800 rounded shadow-lg hidden z-20">
+          <a href="/usersignup" class="block px-4 py-2 hover:bg-gray-700">Signup</a>
+          <a href="/userlogin" class="block px-4 py-2 hover:bg-gray-700">Login</a>
+        </div>
+      </div>
+
+      <!-- Designer Dropdown -->
+      <div class="relative">
+        <button onclick="toggleDropdown('designerDropdown')" class="hover:underline focus:outline-none">Designer ▾</button>
+        <div id="designerDropdown" class="absolute right-0 mt-2 w-40 bg-gray-800 rounded shadow-lg hidden z-20">
+          <a href="/designersignup" class="block px-4 py-2 hover:bg-gray-700">Signup</a>
+          <a href="/designerlogin" class="block px-4 py-2 hover:bg-gray-700">Login</a>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="h-screen bg-cover bg-center flex items-center justify-center text-center pt-16" style="background-image: url('https://images.unsplash.com/photo-1536528087222-ef43dd3bb0ea?auto=format&fit=crop&w=1500&q=80');">
+    <div class="bg-black bg-opacity-60 p-10 rounded">
+      <h2 class="text-4xl font-bold mb-4">Empower Student Designers</h2>
+      <p class="text-lg mb-6">Shop. Collaborate. Customize.</p>
+      <a href="#" class="bg-red-600 hover:bg-red-700 px-6 py-3 text-white rounded font-semibold">Explore Stores</a>
+    </div>
+  </header>
+
+  <!-- Featured Designers -->
+  <section class="py-20 px-6 bg-gray-900">
+    <h3 class="text-3xl font-bold mb-6">Top Designers</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1619983081563-430fba3036c1?auto=format&fit=crop&w=800&q=80" alt="Designer 1" class="w-full h-64 object-cover">
+        <div class="p-4">
+          <h4 class="text-xl font-semibold">Aarav's Closet</h4>
+          <p>Specialized in sustainable fashion</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1562157873-818bc0726f19?auto=format&fit=crop&w=800&q=80" alt="Designer 2" class="w-full h-64 object-cover">
+        <div class="p-4">
+          <h4 class="text-xl font-semibold">Mira Bags</h4>
+          <p>Handcrafted bags & accessories</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?auto=format&fit=crop&w=800&q=80" alt="Designer 3" class="w-full h-64 object-cover">
+        <div class="p-4">
+          <h4 class="text-xl font-semibold">Sneaker Spot</h4>
+          <p>Custom shoes for every vibe</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Showcase -->
+  <section class="py-20 px-6 bg-black">
+    <h3 class="text-3xl font-bold mb-6">Shop by Category</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="relative group">
+        <img src="https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=800&q=80" class="rounded-lg shadow-lg transition-transform group-hover:scale-105 duration-300">
+        <div class="absolute bottom-4 left-4 text-white text-xl font-bold bg-black bg-opacity-50 px-3 py-1 rounded">Clothing</div>
+      </div>
+      <div class="relative group">
+        <img src="https://images.unsplash.com/photo-1606406053875-5c58e3a35a2f?auto=format&fit=crop&w=800&q=80" class="rounded-lg shadow-lg transition-transform group-hover:scale-105 duration-300">
+        <div class="absolute bottom-4 left-4 text-white text-xl font-bold bg-black bg-opacity-50 px-3 py-1 rounded">Bags</div>
+      </div>
+      <div class="relative group">
+        <img src="https://images.unsplash.com/photo-1528701800489-20e2c84d330f?auto=format&fit=crop&w=800&q=80" class="rounded-lg shadow-lg transition-transform group-hover:scale-105 duration-300">
+        <div class="absolute bottom-4 left-4 text-white text-xl font-bold bg-black bg-opacity-50 px-3 py-1 rounded">Shoes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-20 bg-gray-800 text-center">
+    <h3 class="text-3xl font-bold mb-4">Are you a student designer?</h3>
+    <p class="mb-6">Start your own store and grow your brand with us.</p>
+    <a href="/designer/signup" class="bg-red-600 hover:bg-red-700 px-6 py-3 text-white rounded font-semibold">Open Your Store</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-6 bg-black text-center text-gray-500 text-sm">
+    &copy; 2025 DesignHub. All rights reserved.
+  </footer>
+
+</body>
+</html>

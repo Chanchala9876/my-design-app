@@ -1,0 +1,13 @@
+<h1 class="text-3xl font-bold mb-4">Orders Received</h1>
+<a href="/designer/dashboard" class="text-blue-600 hover:underline mb-4 inline-block">← Back to Dashboard</a>
+
+<form method="GET" action="/designer/orders" class="mb-6">
+  <label for="status" class="mr-2 font-medium">Filter by status:</label>
+  <select name="status" id="status" class="p-2 border rounded" onchange="this.form.submit()">
+    <option value="">All</option>
+    <option value="pending" <%= selectedStatus === 'pending' ? 'selected' : '' %>>Pending</option>
+    <option value="shipped" <%= selectedStatus === 'shipped' ? 'selected' : '' %>>Shipped</option>
+    <option value="delivered" <%= selectedStatus === 'delivered' ? 'selected' : '' %>>Delivered</option>
+    <option value="cancelled" <%= selectedStatus === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+  </select>
+</form>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Designer Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <nav class="bg-black text-white p-4 flex justify-between">
+    <h1 class="text-xl font-bold">DesignHub - Dashboard</h1>
+    <div>
+      <a href="/logout" class="ml-4 hover:underline">Logout</a>
+    </div>
+  </nav>
+
+  <main class="p-6">
+    <h2 class="text-2xl font-semibold mb-4">Welcome, <%= designer.name %></h2>
+
+   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+  <a href="/designer/upload-product" class="p-6 bg-white rounded shadow hover:shadow-lg text-center">📦 Upload New Product</a>
+  <a href="/designer/bank" class="p-6 bg-white rounded shadow hover:shadow-lg text-center">🏦 Add Bank Details</a>
+  <a href="/designer/custom-requests" class="p-6 bg-white rounded shadow hover:shadow-lg text-center">🛠️ View Custom Requests</a>
+  <a href="/designer/orders" class="p-6 bg-white rounded shadow hover:shadow-lg text-center">📬 View Orders Received</a>
+</div>
+
+
+    <h3 class="text-xl font-semibold mb-2">Your Products</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <h2 class="text-2xl font-semibold mb-4">
+  Welcome, <%= designer ? designer.name : 'Designer' %>
+</h2>
+
+      <% products.forEach(prod => { %>
+        <div class="bg-white p-4 rounded shadow">
+          <img src="<%= prod.image %>" class="w-full h-40 object-cover mb-2">
+          <h4 class="font-bold"><%= prod.name %></h4>
+          <p><%= prod.description %></p>
+          <p class="text-sm text-gray-600">Price: ₹<%= prod.price %></p>
+          <a href="/designer/edit-product/<%= prod._id %>" class="text-blue-500 hover:underline">Edit</a>
+        </div>
+      <% }) %>
+    </div>
+  </main>
+</body>
+</html>

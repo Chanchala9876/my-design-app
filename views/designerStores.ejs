@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= category %> Stores</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+  <nav class="p-6 bg-black text-white flex justify-between">
+    <h1 class="text-2xl font-bold">DesignHub</h1>
+    <a href="/user/content" class="hover:underline">← Back to Categories</a>
+  </nav>
+
+  <header class="text-center py-10">
+    <h2 class="text-4xl font-bold mb-2"><%= category %> Designer Stores</h2>
+    <p class="text-gray-600">Explore talented student designers in the <%= category %> category</p>
+  </header>
+
+  <main class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 pb-12">
+    <% if (designers.length === 0) { %>
+      <p class="text-center text-gray-500 col-span-full">No designers found in this category.</p>
+    <% } %>
+
+    <% designers.forEach(designer => { %>
+      <div class="bg-white rounded-lg shadow p-4 hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-2"><%= designer.storeName %></h3>
+        <p class="text-gray-700 mb-1">Owner: <%= designer.name %></p>
+        <p class="text-gray-600 text-sm">Email: <%= designer.email %></p>
+      </div>
+    <% }) %>
+  </main>
+
+  <footer class="py-6 bg-black text-center text-white text-sm">
+    &copy; 2025 DesignHub. All rights reserved.
+  </footer>
+
+</body>
+</html>
