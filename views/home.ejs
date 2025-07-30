@@ -3,40 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DesignHub</title>
+  <title>DesignHub - Empowering Student Designers</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                  url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .hero-bg {
+      min-height: 100vh;
+    }
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+  </style>
   <script>
     function toggleDropdown(id) {
       document.getElementById(id).classList.toggle('hidden');
     }
   </script>
 </head>
-<body class="bg-black text-white">
+<body class="text-white">
 
   <!-- Navbar -->
-  <nav class="flex justify-between items-center p-6 bg-black bg-opacity-90 fixed w-full z-10">
-    <h1 class="text-2xl font-bold">DesignHub</h1>
+  <nav class="glass-effect flex justify-between items-center p-6 fixed w-full z-50">
+    <div class="flex items-center space-x-2">
+      <i class="fas fa-palette text-3xl text-purple-400"></i>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">DesignHub</h1>
+    </div>
     <div class="space-x-6 relative flex items-center">
 
-      <a href="/" class="hover:underline">Home</a>
-      <a href="#" class="hover:underline">Stores</a>
-      <a href="#" class="hover:underline">Categories</a>
+      <a href="/" class="hover:text-purple-300 transition-colors duration-300">Home</a>
+      <a href="#" class="hover:text-purple-300 transition-colors duration-300">Stores</a>
+      <a href="#" class="hover:text-purple-300 transition-colors duration-300">Categories</a>
 
       <!-- User Dropdown -->
       <div class="relative">
-        <button onclick="toggleDropdown('userDropdown')" class="hover:underline focus:outline-none">User ▾</button>
-        <div id="userDropdown" class="absolute right-0 mt-2 w-40 bg-gray-800 rounded shadow-lg hidden z-20">
-          <a href="/usersignup" class="block px-4 py-2 hover:bg-gray-700">Signup</a>
-          <a href="/userlogin" class="block px-4 py-2 hover:bg-gray-700">Login</a>
+        <button onclick="toggleDropdown('userDropdown')" class="hover:text-purple-300 focus:outline-none transition-colors duration-300">
+          <i class="fas fa-user mr-2"></i>User <i class="fas fa-chevron-down ml-1"></i>
+        </button>
+        <div id="userDropdown" class="absolute right-0 mt-2 w-48 glass-effect rounded-lg shadow-xl hidden z-20">
+          <a href="/usersignup" class="block px-4 py-3 hover:bg-white hover:bg-opacity-20 transition-colors duration-300 rounded-t-lg">
+            <i class="fas fa-user-plus mr-2"></i>Signup
+          </a>
+          <a href="/userlogin" class="block px-4 py-3 hover:bg-white hover:bg-opacity-20 transition-colors duration-300 rounded-b-lg">
+            <i class="fas fa-sign-in-alt mr-2"></i>Login
+          </a>
         </div>
       </div>
 
       <!-- Designer Dropdown -->
       <div class="relative">
-        <button onclick="toggleDropdown('designerDropdown')" class="hover:underline focus:outline-none">Designer ▾</button>
-        <div id="designerDropdown" class="absolute right-0 mt-2 w-40 bg-gray-800 rounded shadow-lg hidden z-20">
-          <a href="/designersignup" class="block px-4 py-2 hover:bg-gray-700">Signup</a>
-          <a href="/designerlogin" class="block px-4 py-2 hover:bg-gray-700">Login</a>
+        <button onclick="toggleDropdown('designerDropdown')" class="hover:text-purple-300 focus:outline-none transition-colors duration-300">
+          <i class="fas fa-paint-brush mr-2"></i>Designer <i class="fas fa-chevron-down ml-1"></i>
+        </button>
+        <div id="designerDropdown" class="absolute right-0 mt-2 w-48 glass-effect rounded-lg shadow-xl hidden z-20">
+          <a href="/designersignup" class="block px-4 py-3 hover:bg-white hover:bg-opacity-20 transition-colors duration-300 rounded-t-lg">
+            <i class="fas fa-store mr-2"></i>Open Store
+          </a>
+          <a href="/designerlogin" class="block px-4 py-3 hover:bg-white hover:bg-opacity-20 transition-colors duration-300 rounded-b-lg">
+            <i class="fas fa-sign-in-alt mr-2"></i>Login
+          </a>
         </div>
       </div>
 
@@ -44,71 +84,146 @@
   </nav>
 
   <!-- Hero Section -->
-  <header class="h-screen bg-cover bg-center flex items-center justify-center text-center pt-16" style="background-image: url('https://images.unsplash.com/photo-1536528087222-ef43dd3bb0ea?auto=format&fit=crop&w=1500&q=80');">
-    <div class="bg-black bg-opacity-60 p-10 rounded">
-      <h2 class="text-4xl font-bold mb-4">Empower Student Designers</h2>
-      <p class="text-lg mb-6">Shop. Collaborate. Customize.</p>
-      <a href="#" class="bg-red-600 hover:bg-red-700 px-6 py-3 text-white rounded font-semibold">Explore Stores</a>
+  <header class="hero-bg h-screen flex items-center justify-center text-center pt-16">
+    <div class="glass-effect p-12 rounded-2xl max-w-4xl mx-6 floating">
+      <h2 class="text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        Empower Student Designers
+      </h2>
+      <p class="text-xl mb-8 text-gray-200">Discover unique creations from talented student designers. Shop, collaborate, and customize your perfect piece.</p>
+      <div class="space-x-4">
+        <a href="/content" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 text-white rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+          <i class="fas fa-shopping-bag mr-2"></i>Explore Stores
+        </a>
+        <a href="/designersignup" class="border-2 border-white hover:bg-white hover:text-purple-600 px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+          <i class="fas fa-store mr-2"></i>Start Selling
+        </a>
+      </div>
     </div>
   </header>
 
   <!-- Featured Designers -->
-  <section class="py-20 px-6 bg-gray-900">
-    <h3 class="text-3xl font-bold mb-6">Top Designers</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-        <img src="https://images.unsplash.com/photo-1619983081563-430fba3036c1?auto=format&fit=crop&w=800&q=80" alt="Designer 1" class="w-full h-64 object-cover">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Aarav's Closet</h4>
-          <p>Specialized in sustainable fashion</p>
+  <section class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <h3 class="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <i class="fas fa-star mr-3"></i>Featured Designers
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div class="glass-effect rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-500">
+        <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Designer 1" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h4 class="text-2xl font-bold mb-2">Aarav's Closet</h4>
+          <p class="text-gray-300 mb-4">Specialized in sustainable fashion</p>
+          <div class="flex items-center text-yellow-400">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span class="ml-2 text-white">5.0</span>
+          </div>
         </div>
       </div>
-      <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-        <img src="https://images.unsplash.com/photo-1562157873-818bc0726f19?auto=format&fit=crop&w=800&q=80" alt="Designer 2" class="w-full h-64 object-cover">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Mira Bags</h4>
-          <p>Handcrafted bags & accessories</p>
+      <div class="glass-effect rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-500">
+        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Designer 2" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h4 class="text-2xl font-bold mb-2">Mira Bags</h4>
+          <p class="text-gray-300 mb-4">Handcrafted bags & accessories</p>
+          <div class="flex items-center text-yellow-400">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span class="ml-2 text-white">4.5</span>
+          </div>
         </div>
       </div>
-      <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-        <img src="https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?auto=format&fit=crop&w=800&q=80" alt="Designer 3" class="w-full h-64 object-cover">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Sneaker Spot</h4>
-          <p>Custom shoes for every vibe</p>
+      <div class="glass-effect rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-500">
+        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Designer 3" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h4 class="text-2xl font-bold mb-2">Sneaker Spot</h4>
+          <p class="text-gray-300 mb-4">Custom shoes for every vibe</p>
+          <div class="flex items-center text-yellow-400">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span class="ml-2 text-white">4.8</span>
+          </div>
         </div>
+      </div>
       </div>
     </div>
   </section>
 
   <!-- Category Showcase -->
-  <section class="py-20 px-6 bg-black">
-    <h3 class="text-3xl font-bold mb-6">Shop by Category</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="relative group">
-        <img src="https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=800&q=80" class="rounded-lg shadow-lg transition-transform group-hover:scale-105 duration-300">
-        <div class="absolute bottom-4 left-4 text-white text-xl font-bold bg-black bg-opacity-50 px-3 py-1 rounded">Clothing</div>
-      </div>
-      <div class="relative group">
-        <img src="https://images.unsplash.com/photo-1606406053875-5c58e3a35a2f?auto=format&fit=crop&w=800&q=80" class="rounded-lg shadow-lg transition-transform group-hover:scale-105 duration-300">
-        <div class="absolute bottom-4 left-4 text-white text-xl font-bold bg-black bg-opacity-50 px-3 py-1 rounded">Bags</div>
-      </div>
-      <div class="relative group">
-        <img src="https://images.unsplash.com/photo-1528701800489-20e2c84d330f?auto=format&fit=crop&w=800&q=80" class="rounded-lg shadow-lg transition-transform group-hover:scale-105 duration-300">
-        <div class="absolute bottom-4 left-4 text-white text-xl font-bold bg-black bg-opacity-50 px-3 py-1 rounded">Shoes</div>
+  <section class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <h3 class="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <i class="fas fa-th-large mr-3"></i>Shop by Category
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="relative group glass-effect rounded-2xl overflow-hidden shadow-2xl">
+          <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="w-full h-80 object-cover transition-transform group-hover:scale-110 duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <h4 class="text-2xl font-bold mb-2">Clothing</h4>
+            <p class="text-gray-300">Trendy fashion pieces</p>
+          </div>
+        </div>
+        <div class="relative group glass-effect rounded-2xl overflow-hidden shadow-2xl">
+          <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="w-full h-80 object-cover transition-transform group-hover:scale-110 duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <h4 class="text-2xl font-bold mb-2">Bags</h4>
+            <p class="text-gray-300">Stylish accessories</p>
+          </div>
+        </div>
+        <div class="relative group glass-effect rounded-2xl overflow-hidden shadow-2xl">
+          <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="w-full h-80 object-cover transition-transform group-hover:scale-110 duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <h4 class="text-2xl font-bold mb-2">Shoes</h4>
+            <p class="text-gray-300">Unique footwear</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Call to Action -->
-  <section class="py-20 bg-gray-800 text-center">
-    <h3 class="text-3xl font-bold mb-4">Are you a student designer?</h3>
-    <p class="mb-6">Start your own store and grow your brand with us.</p>
-    <a href="/designer/signup" class="bg-red-600 hover:bg-red-700 px-6 py-3 text-white rounded font-semibold">Open Your Store</a>
+  <section class="py-20 text-center">
+    <div class="glass-effect p-12 rounded-2xl max-w-4xl mx-auto">
+      <h3 class="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        Are you a student designer?
+      </h3>
+      <p class="text-xl mb-8 text-gray-300">Start your own store and grow your brand with us. Join thousands of successful student entrepreneurs.</p>
+      <a href="/designersignup" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 text-white rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+        <i class="fas fa-rocket mr-2"></i>Open Your Store
+      </a>
+    </div>
   </section>
 
   <!-- Footer -->
-  <footer class="py-6 bg-black text-center text-gray-500 text-sm">
-    &copy; 2025 DesignHub. All rights reserved.
+  <footer class="py-12 text-center">
+    <div class="glass-effect p-8 rounded-2xl max-w-4xl mx-auto">
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="#" class="text-2xl hover:text-purple-400 transition-colors duration-300">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="#" class="text-2xl hover:text-purple-400 transition-colors duration-300">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="text-2xl hover:text-purple-400 transition-colors duration-300">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="text-2xl hover:text-purple-400 transition-colors duration-300">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </div>
+      <p class="text-gray-300">&copy; 2025 DesignHub. All rights reserved. | Empowering student designers worldwide.</p>
+    </div>
   </footer>
 
 </body>

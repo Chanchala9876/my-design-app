@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - DesignHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                  url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+  <!-- Navbar -->
+  <nav class="glass-effect flex justify-between items-center p-6 fixed w-full z-50">
+    <div class="flex items-center space-x-2">
+      <i class="fas fa-palette text-3xl text-purple-400"></i>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">DesignHub</h1>
+    </div>
+    <a href="/content" class="hover:text-purple-300 transition-colors duration-300">
+      <i class="fas fa-arrow-left mr-2"></i>Back to Shopping
+    </a>
+  </nav>
+
+  <div class="pt-24 pb-8 px-6">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <i class="fas fa-shopping-cart mr-3"></i>Checkout
+      </h1>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Order Summary -->
+        <div class="glass-effect p-6 rounded-2xl">
+          <h2 class="text-2xl font-bold mb-6 text-purple-300">
+            <i class="fas fa-list mr-2"></i>Order Summary
+          </h2>
+          
+          <% cartItems.forEach(item => { %>
+            <div class="flex items-center space-x-4 mb-4 p-4 bg-white bg-opacity-10 rounded-lg">
+              <img src="<%= item.product.image %>" alt="<%= item.product.name %>" class="w-16 h-16 object-cover rounded">
+              <div class="flex-1">
+                <h3 class="font-semibold"><%= item.product.name %></h3>
+                <p class="text-gray-300 text-sm">Quantity: <%= item.quantity %></p>
+                <p class="text-purple-300 font-semibold">₹<%= (item.product.price * item.quantity).toFixed(2) %></p>
+              </div>
+            </div>
+          <% }); %>
+
+          <div class="border-t border-white border-opacity-20 pt-4 mt-6">
+            <div class="flex justify-between mb-2">
+              <span>Subtotal:</span>
+              <span>₹<%= subtotal.toFixed(2) %></span>
+            </div>
+            <div class="flex justify-between mb-2">
+              <span>Shipping:</span>
+              <span>₹<%= shipping.toFixed(2) %></span>
+            </div>
+            <div class="flex justify-between text-xl font-bold text-purple-300">
+              <span>Total:</span>
+              <span>₹<%= total.toFixed(2) %></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="glass-effect p-6 rounded-2xl">
+          <h2 class="text-2xl font-bold mb-6 text-purple-300">
+            <i class="fas fa-shipping-fast mr-2"></i>Shipping Details
+          </h2>
+
+          <form action="/checkout/process" method="POST" id="checkoutForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-sm font-medium mb-2">Full Name *</label>
+                <input type="text" name="fullName" required 
+                       class="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-purple-400">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Phone Number *</label>
+                <input type="tel" name="phone" required 
+                       class="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-purple-400">
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2">Address *</label>
+              <textarea name="address" required rows="3"
+                        class="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-purple-400"
+                        placeholder="Enter your complete address"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="block text-sm font-medium mb-2">City *</label>
+                <input type="text" name="city" required 
+                       class="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-purple-400">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">State *</label>
+                <input type="text" name="state" required 
+                       class="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-purple-400">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Pincode *</label>
+                <input type="text" name="pincode" required 
+                       class="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-purple-400">
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-sm font-medium mb-2">Payment Method</label>
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input type="radio" name="paymentMethod" value="online" checked 
+                         class="mr-2 text-purple-600">
+                  <span>Online Payment (Credit/Debit Card)</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="radio" name="paymentMethod" value="cod" 
+                         class="mr-2 text-purple-600">
+                  <span>Cash on Delivery</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-sm font-medium mb-2">Additional Notes (Optional)</label>
+              <textarea name="notes" rows="2"
+                        class="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-purple-400"
+                        placeholder="Any special instructions for delivery"></textarea>
+            </div>
+
+            <button type="button" id="payButton" data-total="<%= total %>"
+                    class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 py-4 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+              <i class="fas fa-lock mr-2"></i>Proceed to Payment - ₹<%= total.toFixed(2) %>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Razorpay Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  
+  <script>
+    // Form validation and payment processing
+    document.getElementById('payButton').addEventListener('click', async function() {
+      const form = document.getElementById('checkoutForm');
+      const formData = new FormData(form);
+      
+      // Validate form
+      const phone = formData.get('phone');
+      const pincode = formData.get('pincode');
+      
+      if (phone.length < 10) {
+        alert('Please enter a valid phone number');
+        return;
+      }
+      
+      if (pincode.length !== 6) {
+        alert('Please enter a valid 6-digit pincode');
+        return;
+      }
+
+      // Disable button and show loading
+      const button = this;
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+      button.disabled = true;
+
+      try {
+        // Create payment order
+        const orderResponse = await fetch('/payment/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount: parseFloat(button.getAttribute('data-total')),
+            orderId: Date.now()
+          })
+        });
+
+        const orderData = await orderResponse.json();
+        
+        if (!orderData.success) {
+          throw new Error(orderData.error || 'Failed to create payment order');
+        }
+
+        // Prepare order data for verification
+        const orderDataForVerification = {
+          fullName: formData.get('fullName'),
+          phone: formData.get('phone'),
+          address: formData.get('address'),
+          city: formData.get('city'),
+          state: formData.get('state'),
+          pincode: formData.get('pincode'),
+          notes: formData.get('notes')
+        };
+
+        // Configure Razorpay options
+        const options = {
+          key: '<%= process.env.RAZORPAY_KEY_ID %>', // Replace with your key
+          amount: orderData.amount,
+          currency: orderData.currency,
+          name: 'DesignHub',
+          description: 'Purchase from DesignHub',
+          order_id: orderData.order_id,
+          // Enable all payment methods including UPI
+          config: {
+            display: {
+              blocks: {
+                utib: {
+                  name: "Pay using UPI",
+                  instruments: [
+                    {
+                      method: "upi"
+                    }
+                  ]
+                },
+                other: {
+                  name: "Other Payment methods",
+                  instruments: [
+                    {
+                      method: "card"
+                    },
+                    {
+                      method: "netbanking"
+                    }
+                  ]
+                }
+              },
+              sequence: ["block.utib", "block.other"],
+              preferences: {
+                show_default_blocks: false
+              }
+            }
+          },
+          handler: async function(response) {
+            try {
+              // Verify payment
+              const verifyResponse = await fetch('/payment/verify-payment', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
+                  orderData: orderDataForVerification
+                })
+              });
+
+              const verifyData = await verifyResponse.json();
+              
+              if (verifyData.success) {
+                // Payment successful
+                window.location.href = '/orders/success?orderId=' + response.razorpay_order_id + '&paymentId=' + response.razorpay_payment_id;
+              } else {
+                alert('Payment verification failed: ' + verifyData.error);
+                button.innerHTML = originalText;
+                button.disabled = false;
+              }
+            } catch (error) {
+              console.error('Payment verification error:', error);
+              alert('Payment verification failed. Please try again.');
+              button.innerHTML = originalText;
+              button.disabled = false;
+            }
+          },
+          prefill: {
+            name: formData.get('fullName'),
+            contact: formData.get('phone'),
+            email: '<%= user ? user.email : "" %>'
+          },
+          // Enable UPI and other payment methods
+          method: {
+            upi: {
+              flow: "intent"
+            },
+            card: {},
+            netbanking: {}
+          },
+          theme: {
+            color: '#8B5CF6'
+          },
+          modal: {
+            ondismiss: function() {
+              button.innerHTML = originalText;
+              button.disabled = false;
+            }
+          }
+        };
+
+        // Open Razorpay modal
+        const rzp = new Razorpay(options);
+        rzp.open();
+
+      } catch (error) {
+        console.error('Payment error:', error);
+        alert('Payment initialization failed: ' + error.message);
+        button.innerHTML = originalText;
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html> 

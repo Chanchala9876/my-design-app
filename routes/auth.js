@@ -30,6 +30,7 @@ router.post('/user/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: 'Invalid email or password' });
 
+    req.session.userId = user._id;
     res.redirect('/content');
   } catch (err) {
     res.status(500).json({ error: 'Server error' });

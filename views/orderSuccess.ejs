@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Success - DesignHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                  url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+  <!-- Navbar -->
+  <nav class="glass-effect flex justify-between items-center p-6 fixed w-full z-50">
+    <div class="flex items-center space-x-2">
+      <i class="fas fa-palette text-3xl text-purple-400"></i>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">DesignHub</h1>
+    </div>
+    <div class="flex items-center space-x-6">
+      <a href="/content" class="hover:text-purple-300 transition-colors duration-300">
+        <i class="fas fa-shopping-bag mr-2"></i>Continue Shopping
+      </a>
+      <a href="/orders" class="hover:text-purple-300 transition-colors duration-300">
+        <i class="fas fa-list mr-2"></i>My Orders
+      </a>
+    </div>
+  </nav>
+
+  <div class="pt-24 pb-8 px-6">
+    <div class="max-w-2xl mx-auto">
+      <div class="glass-effect p-12 rounded-2xl text-center">
+        <div class="mb-8">
+          <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-check text-4xl text-white"></i>
+          </div>
+          <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+            Order Placed Successfully!
+          </h1>
+          <p class="text-xl text-gray-300 mb-8">
+            Thank you for your purchase. Your order has been confirmed and will be processed soon.
+          </p>
+        </div>
+
+        <div class="bg-white bg-opacity-10 rounded-lg p-6 mb-8">
+          <h3 class="text-xl font-semibold mb-4 text-purple-300">
+            <i class="fas fa-info-circle mr-2"></i>What's Next?
+          </h3>
+          <div class="space-y-3 text-left">
+            <div class="flex items-start space-x-3">
+              <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="text-xs font-bold">1</span>
+              </div>
+              <div>
+                <p class="font-semibold">Order Confirmation</p>
+                <p class="text-gray-300 text-sm">You'll receive an email confirmation with your order details.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <div class="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="text-xs font-bold">2</span>
+              </div>
+              <div>
+                <p class="font-semibold">Processing</p>
+                <p class="text-gray-300 text-sm">The designer will process your order and prepare it for shipping.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="text-xs font-bold">3</span>
+              </div>
+              <div>
+                <p class="font-semibold">Shipping</p>
+                <p class="text-gray-300 text-sm">You'll receive tracking information once your order ships.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <a href="/orders" 
+             class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 text-white rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg inline-block">
+            <i class="fas fa-list mr-2"></i>View My Orders
+          </a>
+          <div class="block">
+            <a href="/content" 
+               class="border-2 border-white hover:bg-white hover:text-purple-600 px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 inline-block">
+              <i class="fas fa-shopping-bag mr-2"></i>Continue Shopping
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-white border-opacity-20">
+          <p class="text-gray-300 text-sm">
+            <i class="fas fa-envelope mr-2"></i>
+            Questions? Contact us at support@designhub.com
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 

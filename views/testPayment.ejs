@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Payment - DesignHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="glass-effect rounded-2xl p-8 max-w-md w-full">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">🧪 Test Payment</h1>
+            <p class="text-gray-200">Test the Razorpay integration</p>
+        </div>
+
+        <!-- Test Amount Selection -->
+        <div class="mb-6">
+            <label class="block text-white font-semibold mb-3">Select Test Amount:</label>
+            <div class="grid grid-cols-2 gap-3">
+                <button class="test-amount bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-4 rounded-lg transition-all" data-amount="100">
+                    ₹100
+                </button>
+                <button class="test-amount bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-4 rounded-lg transition-all" data-amount="500">
+                    ₹500
+                </button>
+                <button class="test-amount bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-4 rounded-lg transition-all" data-amount="1000">
+                    ₹1,000
+                </button>
+                <button class="test-amount bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-4 rounded-lg transition-all" data-amount="2000">
+                    ₹2,000
+                </button>
+            </div>
+        </div>
+
+        <!-- Custom Amount -->
+        <div class="mb-6">
+            <label class="block text-white font-semibold mb-2">Or Enter Custom Amount:</label>
+            <input type="number" id="customAmount" placeholder="Enter amount in ₹" 
+                   class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 text-white placeholder-gray-300 border border-white border-opacity-20 focus:outline-none focus:border-purple-300">
+        </div>
+
+        <!-- Payment Button -->
+        <button id="testPayButton" 
+                class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg mb-4">
+            <i class="fas fa-credit-card mr-2"></i>Test Payment - ₹100
+        </button>
+
+        <!-- Test Credentials -->
+        <div class="bg-white bg-opacity-10 rounded-lg p-4 mb-4">
+            <h3 class="text-white font-semibold mb-3">🧪 Test Credentials:</h3>
+            <div class="space-y-2 text-sm">
+                <div class="text-gray-200">
+                    <strong>Cards:</strong>
+                    <div class="ml-2 text-gray-300">
+                        Success: 4111 1111 1111 1111<br>
+                        Failure: 4000 0000 0000 0002
+                    </div>
+                </div>
+                <div class="text-gray-200">
+                    <strong>UPI:</strong>
+                    <div class="ml-2 text-gray-300">
+                        Success: success@razorpay<br>
+                        Failure: failure@razorpay
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <a href="/content" 
+           class="block w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 text-center">
+            <i class="fas fa-home mr-2"></i>Back to Home
+        </a>
+    </div>
+
+    <!-- Razorpay Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+    <script>
+        let selectedAmount = 100;
+
+        // Handle amount selection
+        document.querySelectorAll('.test-amount').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.test-amount').forEach(btn => {
+                    btn.classList.remove('bg-purple-500', 'bg-opacity-50');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('bg-purple-500', 'bg-opacity-50');
+                
+                selectedAmount = parseInt(this.dataset.amount);
+                updatePaymentButton();
+            });
+        });
+
+        // Handle custom amount
+        document.getElementById('customAmount').addEventListener('input', function() {
+            const amount = parseInt(this.value) || 0;
+            if (amount > 0) {
+                selectedAmount = amount;
+                updatePaymentButton();
+            }
+        });
+
+        function updatePaymentButton() {
+            const button = document.getElementById('testPayButton');
+            button.innerHTML = `<i class="fas fa-credit-card mr-2"></i>Test Payment - ₹${selectedAmount}`;
+        }
+
+        // Handle payment
+        document.getElementById('testPayButton').addEventListener('click', async function() {
+            if (selectedAmount <= 0) {
+                alert('Please select a valid amount');
+                return;
+            }
+
+            const button = this;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+            button.disabled = true;
+
+            try {
+                // Create payment order
+                const orderResponse = await fetch('/payment/create-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: selectedAmount,
+                        orderId: 'test_' + Date.now()
+                    })
+                });
+
+                const orderData = await orderResponse.json();
+                
+                if (!orderData.success) {
+                    throw new Error(orderData.error || 'Failed to create payment order');
+                }
+
+                // Configure Razorpay options
+                const options = {
+                    key: '<%= process.env.RAZORPAY_KEY_ID %>',
+                    amount: orderData.amount,
+                    currency: orderData.currency,
+                    name: 'DesignHub',
+                    description: 'Test Payment',
+                    order_id: orderData.order_id,
+                    handler: function(response) {
+                        alert('Payment successful!\nPayment ID: ' + response.razorpay_payment_id);
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    },
+                    prefill: {
+                        name: 'Test User',
+                        contact: '9999999999',
+                        email: 'test@designhub.com'
+                    },
+                    theme: {
+                        color: '#8B5CF6'
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            button.innerHTML = originalText;
+                            button.disabled = false;
+                        }
+                    }
+                };
+
+                // Open Razorpay modal
+                const rzp = new Razorpay(options);
+                rzp.open();
+
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('Payment initialization failed: ' + error.message);
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html> 

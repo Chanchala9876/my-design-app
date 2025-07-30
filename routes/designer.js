@@ -5,6 +5,8 @@ const BankDetail = require('../models/bankDetail');
 const Designer = require('../models/Designer');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const CustomRequest=require('../models/Customrequest');
+
 const multer = require('multer');
 const path = require('path');
 
@@ -62,6 +64,7 @@ router.get('/orders', async (req, res) => {
     if (!designerId) return res.redirect('/designer/login');
 
     const statusFilter = req.query.status;
+    const paymentStatusFilter = req.query.paymentStatus;
 
     // Get designer's products
     const products = await Product.find({ designerId });
@@ -72,15 +75,87 @@ router.get('/orders', async (req, res) => {
     if (statusFilter) {
       query.status = statusFilter;
     }
+    if (paymentStatusFilter) {
+      query.paymentStatus = paymentStatusFilter;
+    }
 
     const orders = await Order.find(query)
       .populate('productId')
-      .populate('userId');
+      .populate('userId')
+      .sort({ orderedAt: -1 });
 
-    res.render('designerOrders', { orders, selectedStatus: statusFilter || '' });
+    res.render('designerOrders', { 
+      orders, 
+      selectedStatus: statusFilter || '',
+      selectedPaymentStatus: paymentStatusFilter || ''
+    });
   } catch (err) {
     console.error('Error loading orders:', err);
     res.status(500).send('Error loading orders');
+  }
+});
+
+// Update order status
+router.put('/orders/:orderId/status', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const designerId = req.session.designerId;
+
+    if (!designerId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Verify the order belongs to this designer
+    const product = await Product.findById(order.productId);
+    if (!product || product.designerId.toString() !== designerId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    order.status = status;
+    await order.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Update order status error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Update tracking number
+router.put('/orders/:orderId/tracking', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { trackingNumber } = req.body;
+    const designerId = req.session.designerId;
+
+    if (!designerId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Verify the order belongs to this designer
+    const product = await Product.findById(order.productId);
+    if (!product || product.designerId.toString() !== designerId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    order.trackingNumber = trackingNumber;
+    await order.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Update tracking number error:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
@@ -96,7 +171,7 @@ router.post('/upload-product', upload.single('image'), async (req, res) => {
     const designerId = req.session.designerId;
     if (!designerId) return res.redirect('/designer/login');
 
-    const { name, description, price, quqntity } = req.body;
+    const { name, description, price, quantity } = req.body;
     const image = req.file ? '/images/' + req.file.filename : '';
 
     await Product.create({
@@ -104,7 +179,7 @@ router.post('/upload-product', upload.single('image'), async (req, res) => {
       name,
       description,
       price,
-      quqntity,
+      quantity,
       image
     });
 
@@ -123,8 +198,8 @@ router.get('/custom-requests', async (req, res) => {
 
     const customRequests = await CustomRequest.find({ designerId })
       .populate('userId');
-
-    res.render('designerCustomRequests', { customRequests });
+    const designer = await Designer.findById(designerId); // Fetch designer object
+    res.render('designerCustomRequests', { customRequests, designer });
   } catch (err) {
     console.error('Error loading custom requests:', err);
     res.status(500).send('Error loading custom requests');
@@ -157,6 +232,49 @@ router.post('/custom-requests', upload.single('image'), async (req, res) => {
   } catch (err) {
     console.error('Custom request submission error:', err);
     res.status(500).send('Error submitting custom request');
+  }
+});
+
+// POST route to update custom request status
+router.post('/custom-requests/:id/status', async (req, res) => {
+  try {
+    const designerId = req.session.designerId;
+    if (!designerId) return res.redirect('/designer/login');
+    const { id } = req.params;
+    const { status, designerPrice } = req.body;
+    const validStatuses = ['pending', 'accepted', 'rejected', 'completed'];
+    if (!validStatuses.includes(status)) return res.status(400).send('Invalid status');
+
+    const customRequest = await CustomRequest.findById(id);
+    if (!customRequest || customRequest.designerId.toString() !== designerId) {
+      return res.status(403).send('Access denied');
+    }
+    customRequest.status = status;
+    if (status === 'accepted') {
+      if (!designerPrice) return res.status(400).send('Designer price required');
+      customRequest.designerPrice = designerPrice;
+      customRequest.userAccepted = false; // reset user acceptance if re-accepting
+    }
+    await customRequest.save();
+    res.redirect('/designer/custom-requests');
+  } catch (err) {
+    console.error('Custom request status update error:', err);
+    res.status(500).send('Error updating status');
+  }
+});
+// Designer Dashboard
+router.get('/dashboard', async (req, res) => {
+  try {
+    const designerId = req.session.designerId;
+    if (!designerId) return res.redirect('/designer/login');
+
+    const designer = await Designer.findById(designerId);
+    const products = await Product.find({ designerId });
+    
+    res.render('designerDashboard', { designer, products });
+  } catch (err) {
+    console.error('Dashboard Error:', err);
+    res.status(500).send('Error loading dashboard');
   }
 });
 

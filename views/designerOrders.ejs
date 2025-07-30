@@ -1,13 +1,257 @@
-<h1 class="text-3xl font-bold mb-4">Orders Received</h1>
-<a href="/designer/dashboard" class="text-blue-600 hover:underline mb-4 inline-block">← Back to Dashboard</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders - DesignHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                  url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+  <!-- Navbar -->
+  <nav class="glass-effect flex justify-between items-center p-6 fixed w-full z-50">
+    <div class="flex items-center space-x-2">
+      <i class="fas fa-palette text-3xl text-purple-400"></i>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">DesignHub</h1>
+    </div>
+    <a href="/designer/dashboard" class="hover:text-purple-300 transition-colors duration-300">
+      <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+    </a>
+  </nav>
 
-<form method="GET" action="/designer/orders" class="mb-6">
-  <label for="status" class="mr-2 font-medium">Filter by status:</label>
-  <select name="status" id="status" class="p-2 border rounded" onchange="this.form.submit()">
-    <option value="">All</option>
-    <option value="pending" <%= selectedStatus === 'pending' ? 'selected' : '' %>>Pending</option>
-    <option value="shipped" <%= selectedStatus === 'shipped' ? 'selected' : '' %>>Shipped</option>
-    <option value="delivered" <%= selectedStatus === 'delivered' ? 'selected' : '' %>>Delivered</option>
-    <option value="cancelled" <%= selectedStatus === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
-  </select>
-</form>
+  <div class="pt-24 pb-8 px-6">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <i class="fas fa-shopping-bag mr-3"></i>Orders Received
+      </h1>
+
+      <!-- Filter Section -->
+      <div class="glass-effect p-6 rounded-2xl mb-8">
+        <form method="GET" action="/designer/orders" class="flex flex-wrap items-center gap-4">
+          <div>
+            <label for="status" class="block text-sm font-medium mb-2">Filter by status:</label>
+            <select name="status" id="status" class="p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white focus:outline-none focus:border-purple-400">
+              <option value="">All Orders</option>
+              <option value="pending" <%= selectedStatus === 'pending' ? 'selected' : '' %>>Pending</option>
+              <option value="confirmed" <%= selectedStatus === 'confirmed' ? 'selected' : '' %>>Confirmed</option>
+              <option value="shipped" <%= selectedStatus === 'shipped' ? 'selected' : '' %>>Shipped</option>
+              <option value="delivered" <%= selectedStatus === 'delivered' ? 'selected' : '' %>>Delivered</option>
+              <option value="cancelled" <%= selectedStatus === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+            </select>
+          </div>
+          <div>
+            <label for="paymentStatus" class="block text-sm font-medium mb-2">Payment Status:</label>
+            <select name="paymentStatus" id="paymentStatus" class="p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white focus:outline-none focus:border-purple-400">
+              <option value="">All Payments</option>
+              <option value="pending" <%= selectedPaymentStatus === 'pending' ? 'selected' : '' %>>Pending</option>
+              <option value="completed" <%= selectedPaymentStatus === 'completed' ? 'selected' : '' %>>Completed</option>
+              <option value="failed" <%= selectedPaymentStatus === 'failed' ? 'selected' : '' %>>Failed</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6 py-3 rounded-lg font-semibold transition-all duration-300">
+              <i class="fas fa-filter mr-2"></i>Filter
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Orders List -->
+      <div class="space-y-6">
+        <% if (orders.length === 0) { %>
+          <div class="glass-effect p-12 rounded-2xl text-center">
+            <i class="fas fa-inbox text-6xl text-gray-400 mb-4"></i>
+            <h3 class="text-2xl font-bold mb-2">No Orders Found</h3>
+            <p class="text-gray-300">You haven't received any orders yet.</p>
+          </div>
+        <% } else { %>
+          <% orders.forEach(order => { %>
+            <div class="glass-effect p-6 rounded-2xl">
+              <div class="flex flex-wrap items-start justify-between mb-4">
+                <div class="flex items-center space-x-4">
+                  <img src="<%= order.productId.image %>" alt="<%= order.productId.name %>" class="w-20 h-20 object-cover rounded-lg">
+                  <div>
+                    <h3 class="text-xl font-bold"><%= order.productId.name %></h3>
+                    <p class="text-gray-300">Quantity: <%= order.quantity %></p>
+                    <p class="text-purple-300 font-semibold">₹<%= order.totalPrice.toFixed(2) %></p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="flex items-center space-x-2 mb-2">
+                    <span class="px-3 py-1 rounded-full text-sm font-semibold
+                      <%= order.status === 'pending' ? 'bg-yellow-500 text-yellow-900' : '' %>
+                      <%= order.status === 'confirmed' ? 'bg-blue-500 text-blue-900' : '' %>
+                      <%= order.status === 'shipped' ? 'bg-purple-500 text-purple-900' : '' %>
+                      <%= order.status === 'delivered' ? 'bg-green-500 text-green-900' : '' %>
+                      <%= order.status === 'cancelled' ? 'bg-red-500 text-red-900' : '' %>">
+                      <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
+                    </span>
+                    <span class="px-3 py-1 rounded-full text-sm font-semibold
+                      <%= order.paymentStatus === 'pending' ? 'bg-yellow-500 text-yellow-900' : '' %>
+                      <%= order.paymentStatus === 'completed' ? 'bg-green-500 text-green-900' : '' %>
+                      <%= order.paymentStatus === 'failed' ? 'bg-red-500 text-red-900' : '' %>">
+                      <%= order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1) %>
+                    </span>
+                  </div>
+                  <p class="text-sm text-gray-300">Ordered: <%= new Date(order.orderedAt).toLocaleDateString() %></p>
+                </div>
+              </div>
+
+              <!-- Customer Details -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div>
+                  <h4 class="font-semibold text-purple-300 mb-2">
+                    <i class="fas fa-user mr-2"></i>Customer Details
+                  </h4>
+                  <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                    <p><strong>Name:</strong> <%= order.shippingAddress.fullName %></p>
+                    <p><strong>Phone:</strong> <%= order.shippingAddress.phone %></p>
+                    <p><strong>Email:</strong> <%= order.userId.email %></p>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-purple-300 mb-2">
+                    <i class="fas fa-shipping-fast mr-2"></i>Shipping Address
+                  </h4>
+                  <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                    <p><%= order.shippingAddress.address %></p>
+                    <p><%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> - <%= order.shippingAddress.pincode %></p>
+                    <p><%= order.shippingAddress.country %></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Order Notes -->
+              <% if (order.notes) { %>
+                <div class="mb-4">
+                  <h4 class="font-semibold text-purple-300 mb-2">
+                    <i class="fas fa-sticky-note mr-2"></i>Order Notes
+                  </h4>
+                  <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                    <p><%= order.notes %></p>
+                  </div>
+                </div>
+              <% } %>
+
+              <!-- Status Management -->
+              <div class="border-t border-white border-opacity-20 pt-4">
+                <h4 class="font-semibold text-purple-300 mb-3">Update Order Status</h4>
+                <div class="flex flex-wrap gap-2">
+                  <% if (order.status === 'pending') { %>
+                    <button onclick="updateOrderStatus('<%= order._id %>', 'confirmed')" 
+                            class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-300">
+                      <i class="fas fa-check mr-1"></i>Confirm Order
+                    </button>
+                  <% } %>
+                  
+                  <% if (order.status === 'confirmed' || order.status === 'pending') { %>
+                    <button onclick="updateOrderStatus('<%= order._id %>', 'shipped')" 
+                            class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-300">
+                      <i class="fas fa-shipping-fast mr-1"></i>Mark as Shipped
+                    </button>
+                  <% } %>
+                  
+                  <% if (order.status === 'shipped') { %>
+                    <button onclick="updateOrderStatus('<%= order._id %>', 'delivered')" 
+                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-300">
+                      <i class="fas fa-check-circle mr-1"></i>Mark as Delivered
+                    </button>
+                  <% } %>
+                  
+                  <% if (order.status !== 'delivered' && order.status !== 'cancelled') { %>
+                    <button onclick="updateOrderStatus('<%= order._id %>', 'cancelled')" 
+                            class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-300">
+                      <i class="fas fa-times mr-1"></i>Cancel Order
+                    </button>
+                  <% } %>
+                </div>
+
+                <!-- Tracking Number Input -->
+                <% if (order.status === 'shipped' || order.status === 'delivered') { %>
+                  <div class="mt-4">
+                    <label class="block text-sm font-medium mb-2">Tracking Number:</label>
+                    <div class="flex space-x-2">
+                      <input type="text" id="tracking-<%= order._id %>" 
+                             value="<%= order.trackingNumber || '' %>"
+                             placeholder="Enter tracking number"
+                             class="flex-1 p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:border-purple-400">
+                      <button onclick="updateTrackingNumber('<%= order._id %>')" 
+                              class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-300">
+                        <i class="fas fa-save mr-1"></i>Save
+                      </button>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateOrderStatus(orderId, status) {
+      if (confirm(`Are you sure you want to mark this order as ${status}?`)) {
+        fetch(`/designer/orders/${orderId}/status`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Error updating order status');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error updating order status');
+        });
+      }
+    }
+
+    function updateTrackingNumber(orderId) {
+      const trackingNumber = document.getElementById(`tracking-${orderId}`).value;
+      
+      fetch(`/designer/orders/${orderId}/tracking`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ trackingNumber })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Tracking number updated successfully');
+        } else {
+          alert('Error updating tracking number');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating tracking number');
+      });
+    }
+  </script>
+</body>
+</html>
