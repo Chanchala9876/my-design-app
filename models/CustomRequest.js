@@ -11,7 +11,7 @@ const customRequestSchema = new mongoose.Schema({
   address: { type: String, required: true }, // Delivery address
   status: {
     type: String,
-    enum: ['pending', 'accepted', 'rejected', 'completed'],
+    enum: ['pending', 'accepted', 'rejected', 'in-progress', 'shipped', 'delivered', 'completed'],
     default: 'pending'
   },
   designerPrice: { type: Number }, // Price quoted by designer

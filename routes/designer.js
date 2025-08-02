@@ -242,7 +242,7 @@ router.post('/custom-requests/:id/status', async (req, res) => {
     if (!designerId) return res.redirect('/designer/login');
     const { id } = req.params;
     const { status, designerPrice } = req.body;
-    const validStatuses = ['pending', 'accepted', 'rejected', 'completed'];
+    const validStatuses = ['pending', 'accepted', 'rejected', 'in-progress', 'shipped', 'delivered', 'completed'];
     if (!validStatuses.includes(status)) return res.status(400).send('Invalid status');
 
     const customRequest = await CustomRequest.findById(id);
@@ -260,6 +260,40 @@ router.post('/custom-requests/:id/status', async (req, res) => {
   } catch (err) {
     console.error('Custom request status update error:', err);
     res.status(500).send('Error updating status');
+  }
+});
+
+// GET route for designer chat page
+router.get('/chat/:requestId', async (req, res) => {
+  try {
+    const designerId = req.session.designerId;
+    if (!designerId) return res.redirect('/designer/login');
+    
+    const { requestId } = req.params;
+    const customRequest = await CustomRequest.findById(requestId)
+      .populate('userId', 'name email')
+      .populate('designerId', 'name email');
+    
+    if (!customRequest || customRequest.designerId._id.toString() !== designerId) {
+      return res.status(403).send('Access denied');
+    }
+    
+    // Prepare data for the chat page
+    const chatData = {
+      customRequest: {
+        ...customRequest.toObject(),
+        userDetails: customRequest.userId,
+        designerDetails: customRequest.designerId
+      },
+      isUser: false,
+      designerId: designerId,
+      userId: customRequest.userId._id
+    };
+    
+    res.render('chat', chatData);
+  } catch (err) {
+    console.error('Designer chat page error:', err);
+    res.status(500).send('Error loading chat');
   }
 });
 // Designer Dashboard
