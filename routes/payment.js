@@ -20,7 +20,10 @@ const requireAuth = (req, res, next) => {
 router.post('/create-order', requireAuth, async (req, res) => {
   try {
     const userId = req.session.userId;
+    console.log('Creating order for user:', userId);
     const { amount, orderId } = req.body;
+    
+    console.log('Order request:', { amount, orderId });
 
     // Validate amount
     if (!amount || amount <= 0) {
@@ -141,15 +144,15 @@ router.post('/verify-payment', requireAuth, async (req, res) => {
 });
 
 // Payment webhook (for production)
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+router.post('/webhook', async (req, res) => {
   try {
     const crypto = require('crypto');
     const signature = req.headers['x-razorpay-signature'];
     
-    // Verify webhook signature
+    // Verify webhook signature using rawBody
     const expectedSignature = crypto
       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(JSON.stringify(req.body))
+      .update(JSON.stringify(req.rawBody))
       .digest('hex');
 
     if (signature !== expectedSignature) {

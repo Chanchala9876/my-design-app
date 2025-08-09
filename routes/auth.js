@@ -40,14 +40,29 @@ router.post('/user/login', async (req, res) => {
 // Designer signup
 router.post('/designer/signup', async (req, res) => {
   try {
-    const { name, storeName, email, password, category } = req.body;
+    const { name, storeName, email, password, category: categoryName } = req.body;
+    
+    // Check if email exists
     const exists = await Designer.findOne({ email });
     if (exists) return res.status(400).json({ error: 'Email already registered' });
 
-    const designer = new Designer({ name, storeName, email, password, category });
+    // Find category by name
+    const category = await Category.findOne({ name: categoryName });
+    if (!category) return res.status(400).json({ error: 'Invalid category' });
+
+    // Create designer with category ID
+    const designer = new Designer({
+      name,
+      storeName,
+      email,
+      password,
+      category: category._id // Store category ID instead of name
+    });
+
     await designer.save();
     res.status(201).json({ message: 'Designer registered successfully' });
   } catch (err) {
+    console.error('Designer Signup Error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });

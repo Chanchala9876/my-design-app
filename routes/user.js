@@ -4,7 +4,7 @@ const Cart = require('../models/Cart');
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const User = require('../models/User');
-const CustomRequest = require('../models/Customrequest');
+const CustomRequest = require('../models/CustomRequest');
 const multer = require('multer');
 const path = require('path');
 
