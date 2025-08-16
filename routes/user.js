@@ -7,6 +7,7 @@ const User = require('../models/User');
 const CustomRequest = require('../models/CustomRequest');
 const multer = require('multer');
 const path = require('path');
+const Review = require('../models/Review');
 
 // Multer setup for image uploads
 const storage = multer.diskStorage({
@@ -30,6 +31,35 @@ const requireAuth = (req, res, next) => {
   }
   next();
 };
+
+// Product details page
+router.get('/product/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id).populate('designerId');
+    if (!product) {
+      return res.status(404).send('Product not found');
+    }
+
+    const reviews = await Review.find({ productId: id })
+      .populate('userId')
+      .sort({ createdAt: -1 });
+
+    // Calculate average rating
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = reviews.length > 0 ? totalRating / reviews.length : 0;
+
+    res.render('productDetails', { 
+      product, 
+      reviews,
+      averageRating,
+      designer: product.designerId
+    });
+  } catch (error) {
+    console.error('Product details error:', error);
+    res.status(500).send('Server error');
+  }
+});
 
 // Add to cart
 router.post('/cart/add', requireAuth, async (req, res) => {

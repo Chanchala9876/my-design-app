@@ -124,6 +124,28 @@ router.post('/verify-payment', requireAuth, async (req, res) => {
         razorpayOrderId: razorpay_order_id
       });
 
+      // Save the order first to get the orderId
+      await order.save();
+
+      // Create payment details
+      const paymentDetail = new PaymentDetail({
+        orderId: order._id,
+        userId,
+        razorpayPaymentId: razorpay_payment_id,
+        razorpayOrderId: razorpay_order_id,
+        amount: product.price * item.quantity,
+        currency: 'INR',
+        status: 'captured',
+        method: req.body.paymentMethod || 'card',
+        metadata: {
+          productId: product._id,
+          productName: product.name,
+          designerId: product.designerId
+        }
+      });
+
+      await paymentDetail.save();
+
       await order.save();
       orders.push(order);
     }

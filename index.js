@@ -43,11 +43,13 @@ const designerRoutes = require('./routes/designer');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const paymentRoutes = require('./routes/payment');
+const reviewRoutes = require('./routes/reviews');
 
 // Use Routes
 app.use('/designer', designerRoutes);
 app.use('/api', authRoutes);
 app.use('/payment', paymentRoutes);
+app.use('/reviews', reviewRoutes);
 app.use('/', userRoutes);
 
 // Routes

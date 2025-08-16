@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= product.name %> | DesignHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Navbar -->
+    <nav class="glass-effect px-6 py-4 flex justify-between items-center shadow-lg fixed w-full z-50">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-palette text-2xl text-purple-400"></i>
+            <a href="/" class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">DesignHub</a>
+        </div>
+        <div class="space-x-6 text-white">
+            <a href="/cart" class="hover:text-purple-300 transition-colors duration-300 relative">
+                <i class="fas fa-shopping-cart mr-2"></i>Cart
+                <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+            </a>
+            <a href="/content" class="hover:text-purple-300 transition-colors duration-300">
+                <i class="fas fa-store mr-2"></i>Store
+            </a>
+            <a href="/dashboard" class="hover:text-purple-300 transition-colors duration-300">
+                <i class="fas fa-user mr-2"></i>Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 pt-24 pb-12">
+        <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+            <!-- Product Details Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+                <!-- Product Image -->
+                <div class="relative">
+                    <img src="<%= product.image %>" alt="<%= product.name %>" 
+                         class="w-full h-96 object-cover rounded-lg shadow-lg">
+                    <% if (product.quantity < 10) { %>
+                        <span class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm">
+                            Only <%= product.quantity %> left!
+                        </span>
+                    <% } %>
+                </div>
+
+                <!-- Product Info -->
+                <div class="space-y-6">
+                    <h1 class="text-3xl font-bold text-gray-900"><%= product.name %></h1>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <% for(let i = 0; i < 5; i++) { %>
+                                <i class="fas fa-star <%= i < averageRating ? 'text-yellow-400' : 'text-gray-300' %>"></i>
+                            <% } %>
+                        </div>
+                        <span class="text-gray-600">
+                            <%= reviews.length %> reviews
+                        </span>
+                    </div>
+                    <p class="text-3xl font-bold text-purple-600">₹<%= product.price %></p>
+                    <p class="text-gray-600"><%= product.description %></p>
+                    
+                    <!-- Designer Info -->
+                    <div class="border-t border-b py-4 my-6">
+                        <p class="text-sm text-gray-600">Designed by</p>
+                        <div class="flex items-center space-x-4 mt-2">
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold">
+                                <%= designer.name.charAt(0) %>
+                            </div>
+                            <div>
+                                <p class="font-semibold"><%= designer.storeName %></p>
+                                <a href="/store/<%= designer._id %>" class="text-purple-600 hover:text-purple-700 text-sm">
+                                    View Store →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add to Cart -->
+                    <div class="flex items-center space-x-4">
+                        <div class="flex border rounded-lg">
+                            <button onclick="updateQuantity(-1)" class="px-4 py-2 text-gray-600 hover:bg-gray-100">−</button>
+                            <input type="number" id="quantity" value="1" min="1" max="<%= product.quantity %>"
+                                   class="w-16 text-center border-x py-2">
+                            <button onclick="updateQuantity(1)" class="px-4 py-2 text-gray-600 hover:bg-gray-100">+</button>
+                        </div>
+                        <button onclick="addToCart()" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                            Add to Cart
+                        </button>
+                    </div>
+
+                    <!-- Stock Status -->
+                    <p class="text-sm text-gray-600">
+                        <i class="fas fa-box-open mr-2"></i>
+                        <%= product.quantity > 0 ? `${product.quantity} in stock` : 'Out of stock' %>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="border-t">
+                <div class="p-8">
+                    <h2 class="text-2xl font-bold mb-6">Customer Reviews</h2>
+                    
+                    <!-- Reviews Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                        <!-- Overall Rating -->
+                        <div class="text-center p-6 bg-gray-50 rounded-lg">
+                            <div class="text-4xl font-bold text-purple-600 mb-2">
+                                <%= averageRating.toFixed(1) %>
+                            </div>
+                            <div class="flex justify-center mb-2">
+                                <% for(let i = 0; i < 5; i++) { %>
+                                    <i class="fas fa-star <%= i < averageRating ? 'text-yellow-400' : 'text-gray-300' %>"></i>
+                                <% } %>
+                            </div>
+                            <p class="text-gray-600"><%= reviews.length %> reviews</p>
+                        </div>
+
+                        <!-- Rating Distribution -->
+                        <div class="col-span-2">
+                            <% for(let i = 5; i >= 1; i--) { %>
+                                <div class="flex items-center mb-2">
+                                    <span class="w-12 text-sm text-gray-600"><%= i %> star</span>
+                                    <div class="flex-1 h-4 mx-4 bg-gray-200 rounded-full overflow-hidden">
+                                        <% const percentage = (reviews.filter(r => r.rating === i).length / reviews.length) * 100 || 0 %>
+                                        <div class="h-full bg-yellow-400" style="width: <%= percentage %>%"></div>
+                                    </div>
+                                    <span class="w-12 text-sm text-gray-600"><%= Math.round(percentage) %>%</span>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Review List -->
+                    <div class="space-y-6">
+                        <% if (reviews.length === 0) { %>
+                            <div class="text-center py-12">
+                                <i class="fas fa-comments text-6xl text-gray-300 mb-4"></i>
+                                <p class="text-xl text-gray-600">No reviews yet</p>
+                                <p class="text-gray-500">Be the first to review this product</p>
+                            </div>
+                        <% } else { %>
+                            <% reviews.forEach(review => { %>
+                                <div class="border-b pb-6">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-10 h-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white">
+                                                <%= review.userId.name.charAt(0) %>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold"><%= review.userId.name %></p>
+                                                <p class="text-sm text-gray-500">
+                                                    <%= new Date(review.createdAt).toLocaleDateString() %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <% for(let i = 0; i < 5; i++) { %>
+                                                <i class="fas fa-star <%= i < review.rating ? 'text-yellow-400' : 'text-gray-300' %>"></i>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    <h3 class="font-semibold mb-2"><%= review.title %></h3>
+                                    <p class="text-gray-600 mb-4"><%= review.comment %></p>
+                                    
+                                    <% if (review.images && review.images.length > 0) { %>
+                                        <div class="flex space-x-4 mb-4">
+                                            <% review.images.forEach(image => { %>
+                                                <img src="<%= image %>" alt="Review image" class="w-24 h-24 object-cover rounded-lg">
+                                            <% }) %>
+                                        </div>
+                                    <% } %>
+
+                                    <button onclick="markHelpful('<%= review._id %>')" class="text-sm text-gray-600 hover:text-purple-600">
+                                        <i class="fas fa-thumbs-up mr-1"></i>
+                                        Helpful (<span id="helpful-<%= review._id %>"><%= review.helpful %></span>)
+                                    </button>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateQuantity(change) {
+            const input = document.getElementById('quantity');
+            const newValue = Math.min(Math.max(1, parseInt(input.value) + change), <%= product.quantity %>);
+            input.value = newValue;
+        }
+
+        function addToCart() {
+            const quantity = document.getElementById('quantity').value;
+            fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productId: '<%= product._id %>',
+                    quantity: parseInt(quantity)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartCount();
+                    alert('Added to cart successfully!');
+                } else {
+                    alert(data.error || 'Error adding to cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding to cart');
+            });
+        }
+
+        function markHelpful(reviewId) {
+            fetch(`/reviews/${reviewId}/helpful`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const helpfulCount = document.getElementById(`helpful-${reviewId}`);
+                helpfulCount.textContent = data.helpfulCount;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateCartCount() {
+            fetch('/cart')
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const cartItems = doc.querySelectorAll('[id^="cart-item-"]');
+                    const cartCount = document.getElementById('cart-count');
+                    if (cartItems.length > 0) {
+                        cartCount.textContent = cartItems.length;
+                        cartCount.classList.remove('hidden');
+                    }
+                })
+                .catch(error => console.error('Error updating cart count:', error));
+        }
+
+        // Initialize cart count
+        updateCartCount();
+    </script>
+</body>
+</html>
