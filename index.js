@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const app = express();
+const path = require('path');   
 
 // DB Models
 const Designer = require('./models/Designer');
@@ -29,7 +30,8 @@ app.post('/payment/webhook', express.raw({ type: 'application/json' }), (req, re
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));    
 app.use(session({
   secret: process.env.SESSION_SECRET || 'please_set_a_session_secret',
   resave: false,

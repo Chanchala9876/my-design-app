@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/b03da374-2779-4a92-972a-02fa276d6652/resourceGroups/smalldesignerapp_group-bd96/providers/Microsoft.Web/sites/smalldesignerapp",
+    "appService.deploySubpath": "."
+}
